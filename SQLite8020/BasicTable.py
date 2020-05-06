@@ -116,13 +116,9 @@ class BasicTable:
                     zSet += ", "
                 else:
                     bFirst = False
-                zValue = sql_fields[key]
-                if isinstance(zValue, str):
-                    zSet += key + f'="{zValue}"'
-                else:
-                    zSet += key + f"={zValue}"
-            self.curs.execute(
-                f"UPDATE {self.table_name} {zSet} WHERE ID = {id_};")
+                zSet += f"{key} = ? "
+            cmd_ = f"UPDATE {self.table_name} {zSet} WHERE ID = {id_};"
+            self.curs.execute(cmd_, tuple(sql_fields.values()))
             return True
         return False
         
