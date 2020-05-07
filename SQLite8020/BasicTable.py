@@ -118,7 +118,7 @@ class BasicTable:
                     bFirst = False
                 zSet += f"{key} = ? "
             cmd_ = f"UPDATE {self.table_name} {zSet} WHERE ID = {id_};"
-            self.curs.execute(cmd_, tuple(sql_fields.values))
+            self.curs.execute(cmd_, tuple(sql_fields.values()))
             return True
         return False
         
