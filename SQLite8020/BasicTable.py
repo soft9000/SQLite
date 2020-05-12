@@ -22,6 +22,9 @@ class BasicTable:
         self.fields = None
         self.table_name = None
 
+    def normalize(self, value):
+        return value.replace('"', "''")
+
     def delete_file(self):
         try:
             import os
@@ -54,6 +57,7 @@ class BasicTable:
             return False
         if self.bOpen is False:
             self.conn = sqlite3.connect(self.file)
+            self.conn.row_factory = sqlite3.Row # WARNING: SQLite, Only!
             self.curs = self.conn.cursor()
             self.bOpen = True
         return True
@@ -117,8 +121,11 @@ class BasicTable:
                 else:
                     bFirst = False
                 zSet += f"{key} = ? "
-            cmd_ = f"UPDATE {self.table_name} {zSet} WHERE ID = {id_};"
-            self.curs.execute(cmd_, tuple(sql_fields.values()))
+            cmd = f"UPDATE {self.table_name} {zSet} WHERE ID = {id_};"
+            self.curs.execute(
+                cmd,
+                tuple(sql_fields.values())
+                )
             return True
         return False
         
@@ -135,11 +142,14 @@ class BasicTable:
             for ref in zlist:
                 yield ref
         return None
-
-
-
-
         
-    
-
-
+    def select_dict(self, sql_select): # WARNING: Requires sqlite3.Row
+        if self.bOpen:
+            self.curs.execute(sql_select)
+            zlist = self.curs.fetchall()
+            for ref in zlist:
+                result = {}
+                for ss, key in enumerate(ref.keys()):
+                    result[key] = ref[ss]
+                yield result
+        return None
