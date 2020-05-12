@@ -22,9 +22,6 @@ class BasicTable:
         self.fields = None
         self.table_name = None
 
-    def normalize(self, value):
-        return value.replace('"', "''")
-
     def delete_file(self):
         try:
             import os
