@@ -145,7 +145,7 @@ class BasicTable:
             self.curs.execute(sql_select)
             zlist = self.curs.fetchall()
             for ref in zlist:
-                result = {}
+                result = OrderedDict()
                 for ss, key in enumerate(ref.keys()):
                     result[key] = ref[ss]
                 yield result
