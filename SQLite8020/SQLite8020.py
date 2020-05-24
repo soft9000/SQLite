@@ -22,4 +22,5 @@ if __name__ == '__main__':
     for row in dao.select(f"select * from {dao.table_name};"):
         print(*row)
     dao.close()
+    print("Testing success.")
 
